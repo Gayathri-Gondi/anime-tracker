@@ -1,0 +1,577 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		AF65A55B2E0DDE8E00C47F3D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF65A5452E0DDE8B00C47F3D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AF65A54C2E0DDE8B00C47F3D;
+			remoteInfo = Aira;
+		};
+		AF65A5652E0DDE8E00C47F3D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF65A5452E0DDE8B00C47F3D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AF65A54C2E0DDE8B00C47F3D;
+			remoteInfo = Aira;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		AF65A5B92E0ED78F00C47F3D /* Aira.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Aira.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF65A5BA2E0ED78F00C47F3D /* AiraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AiraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF65A5BB2E0ED78F00C47F3D /* AiraUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AiraUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		AF65A5782E0DE4DC00C47F3D /* Exceptions for "Aira" folder in "Aira" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = AF65A54C2E0DDE8B00C47F3D /* Aira */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		AF65A54F2E0DDE8B00C47F3D /* Aira */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				AF65A5782E0DE4DC00C47F3D /* Exceptions for "Aira" folder in "Aira" target */,
+			);
+			path = Aira;
+			sourceTree = "<group>";
+		};
+		AF65A55D2E0DDE8E00C47F3D /* AiraTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AiraTests;
+			sourceTree = "<group>";
+		};
+		AF65A5672E0DDE8E00C47F3D /* AiraUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AiraUITests;
+			sourceTree = "<group>";
+		};
+		AF65A5B22E0ECD5300C47F3D /* mascot */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = mascot;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AF65A54A2E0DDE8B00C47F3D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AF65A5572E0DDE8E00C47F3D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AF65A5612E0DDE8E00C47F3D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AF65A5442E0DDE8B00C47F3D = {
+			isa = PBXGroup;
+			children = (
+				AF65A54F2E0DDE8B00C47F3D /* Aira */,
+				AF65A55D2E0DDE8E00C47F3D /* AiraTests */,
+				AF65A5672E0DDE8E00C47F3D /* AiraUITests */,
+				AF65A5B22E0ECD5300C47F3D /* mascot */,
+				AF65A5B92E0ED78F00C47F3D /* Aira.app */,
+				AF65A5BA2E0ED78F00C47F3D /* AiraTests.xctest */,
+				AF65A5BB2E0ED78F00C47F3D /* AiraUITests.xctest */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AF65A54C2E0DDE8B00C47F3D /* Aira */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AF65A56E2E0DDE8E00C47F3D /* Build configuration list for PBXNativeTarget "Aira" */;
+			buildPhases = (
+				AF65A5492E0DDE8B00C47F3D /* Sources */,
+				AF65A54A2E0DDE8B00C47F3D /* Frameworks */,
+				AF65A54B2E0DDE8B00C47F3D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				AF65A54F2E0DDE8B00C47F3D /* Aira */,
+				AF65A5B22E0ECD5300C47F3D /* mascot */,
+			);
+			name = Aira;
+			packageProductDependencies = (
+			);
+			productName = Aira;
+			productReference = AF65A5B92E0ED78F00C47F3D /* Aira.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AF65A5592E0DDE8E00C47F3D /* AiraTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AF65A5712E0DDE8E00C47F3D /* Build configuration list for PBXNativeTarget "AiraTests" */;
+			buildPhases = (
+				AF65A5562E0DDE8E00C47F3D /* Sources */,
+				AF65A5572E0DDE8E00C47F3D /* Frameworks */,
+				AF65A5582E0DDE8E00C47F3D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AF65A55C2E0DDE8E00C47F3D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AF65A55D2E0DDE8E00C47F3D /* AiraTests */,
+			);
+			name = AiraTests;
+			packageProductDependencies = (
+			);
+			productName = AiraTests;
+			productReference = AF65A5BA2E0ED78F00C47F3D /* AiraTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		AF65A5632E0DDE8E00C47F3D /* AiraUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AF65A5742E0DDE8E00C47F3D /* Build configuration list for PBXNativeTarget "AiraUITests" */;
+			buildPhases = (
+				AF65A5602E0DDE8E00C47F3D /* Sources */,
+				AF65A5612E0DDE8E00C47F3D /* Frameworks */,
+				AF65A5622E0DDE8E00C47F3D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AF65A5662E0DDE8E00C47F3D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AF65A5672E0DDE8E00C47F3D /* AiraUITests */,
+			);
+			name = AiraUITests;
+			packageProductDependencies = (
+			);
+			productName = AiraUITests;
+			productReference = AF65A5BB2E0ED78F00C47F3D /* AiraUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AF65A5452E0DDE8B00C47F3D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					AF65A54C2E0DDE8B00C47F3D = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					AF65A5592E0DDE8E00C47F3D = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = AF65A54C2E0DDE8B00C47F3D;
+					};
+					AF65A5632E0DDE8E00C47F3D = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = AF65A54C2E0DDE8B00C47F3D;
+					};
+				};
+			};
+			buildConfigurationList = AF65A5482E0DDE8B00C47F3D /* Build configuration list for PBXProject "Aira" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AF65A5442E0DDE8B00C47F3D;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = AF65A5442E0DDE8B00C47F3D;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AF65A54C2E0DDE8B00C47F3D /* Aira */,
+				AF65A5592E0DDE8E00C47F3D /* AiraTests */,
+				AF65A5632E0DDE8E00C47F3D /* AiraUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AF65A54B2E0DDE8B00C47F3D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AF65A5582E0DDE8E00C47F3D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AF65A5622E0DDE8E00C47F3D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AF65A5492E0DDE8B00C47F3D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AF65A5562E0DDE8E00C47F3D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AF65A5602E0DDE8E00C47F3D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AF65A55C2E0DDE8E00C47F3D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AF65A54C2E0DDE8B00C47F3D /* Aira */;
+			targetProxy = AF65A55B2E0DDE8E00C47F3D /* PBXContainerItemProxy */;
+		};
+		AF65A5662E0DDE8E00C47F3D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AF65A54C2E0DDE8B00C47F3D /* Aira */;
+			targetProxy = AF65A5652E0DDE8E00C47F3D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		AF65A56C2E0DDE8E00C47F3D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = M2Q82WYKZP;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AF65A56D2E0DDE8E00C47F3D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = M2Q82WYKZP;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AF65A56F2E0DDE8E00C47F3D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = M2Q82WYKZP;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Aira/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gayathri.Aira;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AF65A5702E0DDE8E00C47F3D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = M2Q82WYKZP;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Aira/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gayathri.Aira;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		AF65A5722E0DDE8E00C47F3D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = M2Q82WYKZP;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gayathri.AiraTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Aira.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Aira";
+			};
+			name = Debug;
+		};
+		AF65A5732E0DDE8E00C47F3D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = M2Q82WYKZP;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gayathri.AiraTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Aira.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Aira";
+			};
+			name = Release;
+		};
+		AF65A5752E0DDE8E00C47F3D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = M2Q82WYKZP;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gayathri.AiraUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Aira;
+			};
+			name = Debug;
+		};
+		AF65A5762E0DDE8E00C47F3D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = M2Q82WYKZP;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gayathri.AiraUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Aira;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AF65A5482E0DDE8B00C47F3D /* Build configuration list for PBXProject "Aira" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AF65A56C2E0DDE8E00C47F3D /* Debug */,
+				AF65A56D2E0DDE8E00C47F3D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AF65A56E2E0DDE8E00C47F3D /* Build configuration list for PBXNativeTarget "Aira" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AF65A56F2E0DDE8E00C47F3D /* Debug */,
+				AF65A5702E0DDE8E00C47F3D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AF65A5712E0DDE8E00C47F3D /* Build configuration list for PBXNativeTarget "AiraTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AF65A5722E0DDE8E00C47F3D /* Debug */,
+				AF65A5732E0DDE8E00C47F3D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AF65A5742E0DDE8E00C47F3D /* Build configuration list for PBXNativeTarget "AiraUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AF65A5752E0DDE8E00C47F3D /* Debug */,
+				AF65A5762E0DDE8E00C47F3D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AF65A5452E0DDE8B00C47F3D /* Project object */;
+}
