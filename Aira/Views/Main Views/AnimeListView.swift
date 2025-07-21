@@ -11,7 +11,7 @@ enum AnimeSection: String, CaseIterable, Identifiable {
 }
 
 struct AnimeListView: View {
-    @StateObject var viewModel = AnimeListViewModel()
+    @EnvironmentObject var viewModel: AnimeListViewModel
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var animeDataService: AnimeDataService
     

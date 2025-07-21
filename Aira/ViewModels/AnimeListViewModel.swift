@@ -1,33 +1,45 @@
 import Combine
 import Foundation
 
+
+
 class AnimeListViewModel: ObservableObject {
     @Published var animeList: [Anime] = []
     @Published var isLoading = false
     @Published var error: Error?
     
+
     private let animeDataService: AnimeDataServiceProtocol
     private var cancellables = Set<AnyCancellable>()
     
-    // Dependency injection for better testability
     init(service: AnimeDataServiceProtocol = AnimeDataService.shared) {
         self.animeDataService = service
+        self.animeList = service.animeList
+
+        // 🔄 Keep syncing whenever AnimeDataService updates
+        if let shared = service as? AnimeDataService {
+            shared.$animeList
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] updatedList in
+                    self?.animeList = updatedList
+                }
+                .store(in: &cancellables)
+        }
     }
+
     
     func fetchList(token: String) {
-        isLoading = true
         error = nil
         
         animeDataService.fetchAnimeList(token: token)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
-                self?.isLoading = false
                 if case .failure(let error) = completion {
                     self?.error = error
                     print("❌ Fetch error: \(error.localizedDescription)")
                 }
-            } receiveValue: { [weak self] animeList in
-                self?.animeList = animeList
+            } receiveValue: { _ in
+                // 👇 No manual assignment here
             }
             .store(in: &cancellables)
     }
@@ -76,4 +88,3 @@ class AnimeListViewModel: ObservableObject {
         }
     }
 }
-

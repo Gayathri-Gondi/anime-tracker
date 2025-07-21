@@ -93,28 +93,40 @@ struct ContentView: View {
 
     func checkLoginAndFetchList() {
         print("🔍 Checking login and fetching list")
-        if let token = authManager.accessToken {
-            if isTokenExpired(token) {
-                print("⛔️ Token expired.")
-                authManager.logout()
-                showAnimeList = false
-                isLoading = false
-            } else {
-                print("✅ Valid token.")
-                isLoading = true
-                showAnimeList = true
-                // Trigger anime list fetch
-                animeListVM.fetchList(token: token)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    isLoading = false
-                }
-            }
-        } else {
+        
+        guard let token = authManager.accessToken else {
             print("🚫 No token found.")
             showAnimeList = false
             isLoading = false
+            return
+        }
+
+        if isTokenExpired(token) {
+            print("⛔️ Token expired.")
+            authManager.logout()
+            showAnimeList = false
+            isLoading = false
+            return
+        }
+
+        // ✅ Avoid re-fetching if list is already loaded
+        if !animeListVM.animeList.isEmpty {
+            print("🔁 Skipping fetch: anime list already loaded.")
+            showAnimeList = true
+            isLoading = false
+            return
+        }
+
+        print("✅ Valid token. Fetching anime list...")
+        isLoading = true
+        showAnimeList = true
+
+        animeListVM.fetchList(token: token)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            isLoading = false
         }
     }
+
 
     func handleOAuthRedirect(_ url: URL) {
         if let code = extractCode(from: url) {
