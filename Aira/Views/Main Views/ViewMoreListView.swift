@@ -45,10 +45,6 @@ struct ViewMoreListView: View {
 
     private var filteredAnime: [Anime] {
         switch section {
-        case .ongoing:
-            return animeDataService.animeList.filter {
-                $0.animeStatus.uppercased() == "RELEASING"
-            }
         case .currentlywatching:
             return animeDataService.animeList.filter {
                 $0.userStatus.uppercased() == "CURRENT"

@@ -1,7 +1,6 @@
 import SwiftUI
 
 enum AnimeSection: String, CaseIterable, Identifiable {
-    case ongoing = "Ongoing"
     case currentlywatching = "Currently Watching"
     case completed = "Completed"
     case planning = "Planning"
@@ -88,41 +87,6 @@ struct AnimeListView: View {
     }
 }
 
-// MARK: - Subviews (Keep your existing implementations)
-struct AnimeCard: View {
-    let anime: Anime
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            AnimeImageView(url: anime.imageURL)
-            Text(anime.title)
-                .font(AppFonts.custom(size: 12))
-                .foregroundColor(.white)
-                .frame(width: 100, alignment: .leading)
-        }
-    }
-}
-
-struct ViewMoreCard: View {
-    let section: AnimeSection
-
-    var body: some View {
-        VStack {
-            Image(systemName: "ellipsis")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 40, height: 40)
-                .foregroundColor(AppColors.accent)
-
-            Text("View More")
-                .font(AppFonts.custom(size: 12))
-                .foregroundColor(.white)
-        }
-        .frame(width: 100, height: 140)
-        .background(AppColors.accent.opacity(0.2))
-        .cornerRadius(10)
-    }
-}
 
 struct ErrorView: View {
     let error: Error

@@ -29,7 +29,6 @@ struct AnimeImageView: View {
                     .foregroundColor(.gray)
             }
         }
-        .frame(width: 100, height: 140)
         .clipped()
         .cornerRadius(10)
         .onAppear { loadImage() }

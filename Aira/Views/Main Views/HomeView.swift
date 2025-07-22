@@ -1,76 +1,144 @@
 import SwiftUI
-import UserNotifications 
+import UserNotifications
 
 struct HomeView: View {
     @EnvironmentObject var animeListVM: AnimeListViewModel
     @EnvironmentObject var authManager: AuthManager
+    @EnvironmentObject var animeDataService: AnimeDataService
+    @State private var selectedViewMode: AnimeViewMode = .grid
     @State private var currentTime = Date()
 
     var body: some View {
-        ScrollView {
-            LazyVStack(spacing: 16) {
-                ForEach(animeListVM.ongoingAnimeList) { anime in
-                    HStack(spacing: 16) {
-                        AnimeImageView(url: anime.imageURL)
+        ZStack {
+            // Background Gradient
+            LinearGradient(
+                gradient: Gradient(colors: [Color(red: 30/255, green: 30/255, blue: 60/255), .black]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .edgesIgnoringSafeArea(.all)
 
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(anime.title)
-                                .font(AppFonts.custom(size: 16))
-                                .foregroundColor(.white)
+            VStack(spacing: 0) {
+                // ✅ Fixed (non-scrollable) title
+                Text("Anime Airboard")
+                    .font(.system(size: 26, weight: .bold, design: .monospaced))
+                    .foregroundColor(.white)
+                    .shadow(color: .pink.opacity(0.3), radius: 2, x: 0, y: 1)
+                    .frame(maxWidth: .infinity)
+                    .multilineTextAlignment(.center)
+                    .padding()
+                
+                Spacer()
+                
+                Picker("View Mode", selection: $selectedViewMode) {
+                    ForEach(AnimeViewMode.allCases) { mode in
+                        Text(mode.rawValue).tag(mode)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding(.horizontal)
 
-                            if let airingAt = anime.nextAiringEpisodeTime {
-                                let secondsLeft = airingAt - Int(currentTime.timeIntervalSince1970)
-                                if secondsLeft > 0 {
-                                    Text("Ep \(anime.episodeNumber ?? 0) airs in \(formatCountdown(seconds: secondsLeft))")
-                                        .font(.caption)
-                                        .foregroundColor(.pink)
-                                } else {
-                                    Text("Airing soon!")
-                                        .font(.caption)
-                                        .foregroundColor(.orange)
-                                }
-                            } else {
-                                Text("No upcoming episode")
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                            }
+                Spacer()
+                
+                // ✅ Scrollable content below
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 12) {
+                        if !todaysReleases.isEmpty {
+                            Text("Today’s Releases")
+                                .font(.system(size: 18, weight: .bold, design: .monospaced))
+                                .foregroundColor(.yellow)
+                                .padding(.horizontal)
+
+                            animeSection(for: todaysReleases)
                         }
 
-                        Spacer()
+                        if !upcomingAnime.isEmpty {
+                            Text("Upcoming Episodes")
+                                .font(.system(size: 18, weight: .bold, design: .monospaced))
+                                .foregroundColor(.white)
+                                .padding(.horizontal)
+
+                            animeSection(for: upcomingAnime)
+                        }
                     }
-                    .padding(.horizontal)
+                    .padding(.top)
                 }
             }
-            .padding()
         }
-        .background(AppColors.background.edgesIgnoringSafeArea(.all))
         .onAppear {
-            requestNotificationPermission()
+            NotificationManager.requestNotificationPermission()
 
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
                 currentTime = Date()
             }
 
             for anime in animeListVM.ongoingAnimeList {
-                scheduleNotifications(for: anime)
+                NotificationManager.scheduleNotifications(for: anime)
             }
+            
+            NotificationManager.scheduleDemoNotification()
+        }
+    }
+    
+    @ViewBuilder
+    func animeSection(for list: [Anime]) -> some View {
+        switch selectedViewMode {
+        case .grid:
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                ForEach(list) { anime in
+                    NavigationLink(
+                        destination: AnimeDetailView(
+                            anime: SearchAnime(id: anime.id, title: anime.title, imageURL: anime.imageURL)
+                        )
+                    ) {
+                        AnimeGridCard(anime: anime, currentTime: currentTime)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+            }
+            .padding(.horizontal)
 
-            scheduleDemoNotification()
+        case .list:
+            ForEach(list) { anime in
+                NavigationLink(
+                    destination: AnimeDetailView(
+                        anime: SearchAnime(id: anime.id, title: anime.title, imageURL: anime.imageURL)
+                    )
+                ) {
+                    AnimeListCard(anime: anime, currentTime: currentTime)
+                }
+                .buttonStyle(PlainButtonStyle())
+            }
+            .padding(.horizontal)
         }
     }
 
-    func formatCountdown(seconds: Int) -> String {
-        let days = seconds / 86400
-        let hours = (seconds % 86400) / 3600
-        let minutes = (seconds % 3600) / 60
-        let seconds = seconds % 60
-
-        if days > 0 {
-            return String(format: "%dd %02dh %02dm %02ds", days, hours, minutes, seconds)
-        } else {
-            return String(format: "%02dh %02dm %02ds", hours, minutes, seconds)
+    var sortedAnimeList: [Anime] {
+        animeListVM.ongoingAnimeList.sorted {
+            let aTime = $0.nextAiringEpisodeTime ?? Int.max
+            let bTime = $1.nextAiringEpisodeTime ?? Int.max
+            return aTime < bTime
         }
     }
+
+    var todaysReleases: [Anime] {
+        let now = currentTime
+        let calendar = Calendar.current
+        return animeListVM.ongoingAnimeList.filter { anime in
+            guard let airingAt = anime.nextAiringEpisodeTime else { return false }
+            
+            let airingDate = Date(timeIntervalSince1970: TimeInterval(airingAt))
+            let pastAiringDate = calendar.date(byAdding: .day, value: -7, to: airingDate) ?? airingDate
+            
+            return calendar.isDate(airingDate, inSameDayAs: now) || calendar.isDate(pastAiringDate, inSameDayAs: now)
+        }
+    }
+
+    var upcomingAnime: [Anime] {
+        let todayIDs = Set(todaysReleases.map { $0.id })
+        return sortedAnimeList.filter { !todayIDs.contains($0.id) }
+    }
+    
 }
 
 func requestNotificationPermission() {
@@ -136,5 +204,18 @@ func scheduleDemoNotification() {
         } else {
             print("✅ Demo notification scheduled!")
         }
+    }
+}
+
+func formatCountdown(seconds: Int) -> String {
+    let days = seconds / 86400
+    let hours = (seconds % 86400) / 3600
+    let minutes = (seconds % 3600) / 60
+    let seconds = seconds % 60
+    
+    if days > 0 {
+        return String(format: "%dd %02dh %02dm %02ds", days, hours, minutes, seconds)
+    } else {
+        return String(format: "%02dh %02dm %02ds", hours, minutes, seconds)
     }
 }

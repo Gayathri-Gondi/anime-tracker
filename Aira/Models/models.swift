@@ -132,3 +132,10 @@ struct SingleAnimeResponse: Decodable {
         let Media: Media
     }
 }
+
+enum AnimeViewMode: String, CaseIterable, Identifiable {
+    case grid = "grid"
+    case list = "list"
+
+    var id: String { self.rawValue }
+}

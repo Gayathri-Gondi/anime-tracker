@@ -100,13 +100,23 @@ struct AnimeDetailView: View {
                         if isUpdating {
                             ProgressView()
                         } else {
-                            Button("💾 Save Changes to AniList") {
-                                updateAniListEntry()
+                            HStack(spacing: 16) {
+                                Button("💾 Save Changes to AniList") {
+                                    updateAniListEntry()
+                                }
+                                .padding()
+                                .foregroundColor(.white)
+                                .background(Color.pink)
+                                .cornerRadius(12)
+
+                                Button("🗑️ Delete") {
+                                    deleteAniListEntry()
+                                }
+                                .padding()
+                                .foregroundColor(.white)
+                                .background(Color.red)
+                                .cornerRadius(12)
                             }
-                            .padding()
-                            .foregroundColor(.white)
-                            .background(Color.pink)
-                            .cornerRadius(12)
                         }
 
                         if !updateMessage.isEmpty {
@@ -256,6 +266,55 @@ struct AnimeDetailView: View {
             }
         }.resume()
     }
+    
+    func deleteAniListEntry() {
+        guard let entryId = userAnimeEntry?.id else {
+            self.updateMessage = "❌ No entry to delete"
+            return
+        }
+
+        guard let token = loadToken() else {
+            self.updateMessage = "❌ Not logged in"
+            return
+        }
+
+        isUpdating = true
+
+        let mutation = """
+        mutation {
+          DeleteMediaListEntry(id: \(entryId)) {
+            deleted
+          }
+        }
+        """
+
+        var request = URLRequest(url: URL(string: "https://graphql.anilist.co")!)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try? JSONSerialization.data(withJSONObject: ["query": mutation])
+
+        URLSession.shared.dataTask(with: request) { data, _, _ in
+            DispatchQueue.main.async {
+                self.isUpdating = false
+                if data != nil {
+                    self.updateMessage = "✅ Deleted successfully!"
+
+                    // ✅ Fetch the latest anime info after update
+                    fetchSingleAnime(animeID: anime.id, token: token) { freshAnime in
+                        DispatchQueue.main.async {
+                            if let fresh = freshAnime {
+                                animeListVM.addOrUpdateAnime(fresh)
+                            }
+                        }
+                    }
+                } else {
+                    self.updateMessage = "❌ Failed to Delete"
+                }
+            }
+        }.resume()
+    }
+
 }
 
 // MARK: - Detail Row

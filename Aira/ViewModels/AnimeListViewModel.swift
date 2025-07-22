@@ -67,7 +67,8 @@ class AnimeListViewModel: ObservableObject {
                     self?.error = error
                     print("❌ Single anime fetch error: \(error.localizedDescription)")
                 }
-            } receiveValue: { [weak self] anime in
+            } receiveValue: { [weak self]
+                anime in
                 self?.addOrUpdateAnime(anime)
             }
             .store(in: &cancellables)
@@ -75,8 +76,6 @@ class AnimeListViewModel: ObservableObject {
     
     func filteredAnime(for section: AnimeSection) -> [Anime] {
         switch section {
-        case .ongoing:
-            return ongoingAnimeList
         case .currentlywatching:
             return animeList.filter { $0.userStatus.uppercased() == "CURRENT" }
         case .completed:
@@ -87,4 +86,10 @@ class AnimeListViewModel: ObservableObject {
             return animeList
         }
     }
+    
+    func removeAnime(withId id: Int) {
+        animeList.removeAll { $0.id == id }
+    }
 }
+
+
