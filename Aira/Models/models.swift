@@ -139,3 +139,15 @@ enum AnimeViewMode: String, CaseIterable, Identifiable {
 
     var id: String { self.rawValue }
 }
+
+extension Anime {
+    static let placeholder = Anime(
+        id: -1,
+        title: "Loading...",
+        imageURL: "https://via.placeholder.com/100x140.png?text=...",
+        animeStatus: "",
+        userStatus: "",
+        nextAiringEpisodeTime: nil,
+        episodeNumber: nil
+    )
+}

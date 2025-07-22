@@ -9,18 +9,28 @@ import SwiftUI
 // MARK: - Subviews (Keep your existing implementations)
 struct AnimeCard: View {
     let anime: Anime
-    
+    private let cardWidth: CGFloat = 110
+    private let cardHeight: CGFloat = 180 // Optional: define height if you want full card uniformity
+
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             AnimeImageView(url: anime.imageURL)
-                .frame(width: 100, height: 140) // ⛔️ hardcoded size
+                .frame(width: cardWidth, height: 155)
+                .cornerRadius(8)
+
             Text(anime.title)
-                .font(AppFonts.custom(size: 12))
+                .font(.system(size: 10, weight: .semibold, design: .monospaced))
                 .foregroundColor(.white)
-                .frame(width: 100, alignment: .leading)
+                .lineLimit(1)            // truncate after 1 line
+                .truncationMode(.tail)   // "..."
+                .padding(.leading, 4)
         }
+        .frame(width: cardWidth) // ⬅️ This ensures uniform card width
+        .cornerRadius(10)
     }
 }
+
+
 
 struct ViewMoreCard: View {
     let section: AnimeSection
@@ -34,7 +44,7 @@ struct ViewMoreCard: View {
                 .foregroundColor(AppColors.accent)
 
             Text("View More")
-                .font(AppFonts.custom(size: 12))
+                .font(.system(size: 10, weight: .semibold, design: .monospaced))
                 .foregroundColor(.white)
         }
         .frame(width: 100, height: 140)

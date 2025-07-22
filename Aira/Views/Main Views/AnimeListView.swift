@@ -19,8 +19,15 @@ struct AnimeListView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
                     if viewModel.isLoading {
-                        ProgressView()
-                            .frame(maxWidth: .infinity)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                ForEach(0..<4) { _ in
+                                    AnimeCard(anime: Anime.placeholder)
+                                        .redacted(reason: .placeholder)
+                                }
+                            }
+                            .padding(.horizontal, 16)
+                        }
                     } else if let error = viewModel.error {
                         ErrorView(error: error)
                     } else {
@@ -48,9 +55,10 @@ struct AnimeListView: View {
         
         VStack(alignment: .leading, spacing: 12) {
             Text(section.rawValue)
-                .font(AppFonts.custom(size: 20))
+            
+                .font(.system(size: 18, weight: .bold, design: .monospaced))
                 .foregroundColor(.white)
-                .padding(.leading, 16)
+                .padding(.horizontal)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
@@ -77,12 +85,20 @@ struct AnimeListView: View {
                                 .environmentObject(authManager) // Add this if needed
                         ) {
                             ViewMoreCard(section: section)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(AppColors.accent.opacity(0.4), lineWidth: 1)
+                                )
+                                .shadow(color: AppColors.accent.opacity(0.2), radius: 3, x: 0, y: 2)
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
                 }
                 .padding(.horizontal, 16)
             }
+            Divider()
+                .background(Color.white.opacity(0.1))
+                .padding(.horizontal, 16)
         }
     }
 }
