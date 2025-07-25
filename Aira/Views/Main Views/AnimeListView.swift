@@ -16,29 +16,38 @@ struct AnimeListView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
-                    if viewModel.isLoading {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 16) {
-                                ForEach(0..<4) { _ in
-                                    AnimeCard(anime: Anime.placeholder)
-                                        .redacted(reason: .placeholder)
+            ZStack {
+                // Background Gradient
+                LinearGradient(
+                    gradient: Gradient(colors: [Color(red: 30/255, green: 30/255, blue: 60/255), .black]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .edgesIgnoringSafeArea(.all)
+                
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 24) {
+                        if viewModel.isLoading {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 16) {
+                                    ForEach(0..<4) { _ in
+                                        AnimeCard(anime: Anime.placeholder)
+                                            .redacted(reason: .placeholder)
+                                    }
                                 }
+                                .padding(.horizontal, 16)
                             }
-                            .padding(.horizontal, 16)
-                        }
-                    } else if let error = viewModel.error {
-                        ErrorView(error: error)
-                    } else {
-                        ForEach(AnimeSection.allCases.filter { $0 != .all }) { section in
-                            sectionView(for: section)
+                        } else if let error = viewModel.error {
+                            ErrorView(error: error)
+                        } else {
+                            ForEach(AnimeSection.allCases.filter { $0 != .all }) { section in
+                                sectionView(for: section)
+                            }
                         }
                     }
+                    .padding(.top, 16)
                 }
-                .padding(.top, 16)
             }
-            .background(AppColors.background.edgesIgnoringSafeArea(.all))
             .navigationTitle("My Anime")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
@@ -48,6 +57,7 @@ struct AnimeListView: View {
             }
         }
     }
+
     
     @ViewBuilder
     private func sectionView(for section: AnimeSection) -> some View {

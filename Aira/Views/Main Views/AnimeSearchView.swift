@@ -12,7 +12,8 @@ struct AnimeSearchView: View {
     @StateObject private var viewModel = AnimeSearchViewModel()
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var animeListVM: AnimeListViewModel
-
+    @EnvironmentObject var animeDataService: AnimeDataService
+    @State private var showAllRecentSearches = false
     @State private var query = ""
     @State private var addedAnimeIDs: Set<Int> = []
     @State private var selectedAnime: SearchAnime?
@@ -20,10 +21,17 @@ struct AnimeSearchView: View {
 
     var body: some View {
         NavigationStack {
-            ZStack {AppColors.background.ignoresSafeArea()
+            ZStack {
+                // Background Gradient
+                LinearGradient(
+                    gradient: Gradient(colors: [Color(red: 30/255, green: 30/255, blue: 60/255), .black]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .edgesIgnoringSafeArea(.all)
 
                 VStack(spacing: 0) {
-                    HStack {
+                    HStack(spacing: 8) {
                         TextField("Search for anime...", text: $query)
                             .font(AppFonts.custom(size: 16))
                             .padding(12)
@@ -38,30 +46,106 @@ struct AnimeSearchView: View {
                             .onSubmit {
                                 viewModel.performSearch(for: query)
                             }
+
+                        if !query.isEmpty {
+                            Button(action: {
+                                query = ""
+                                viewModel.searchResults = []
+                            }) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.system(size: 20))
+                                    .foregroundColor(.white.opacity(0.7))
+                                    .padding(.trailing, 8)
+                            }
+                            .transition(.opacity)
+                        }
                     }
+                    .animation(.easeInOut, value: query)
                     .padding([.horizontal, .top])
 
-                    ScrollView {
-                        LazyVStack(spacing: 20) {
-                            ForEach(viewModel.searchResults) { anime in
-                                NavigationLink(
-                                    destination: AnimeDetailView(anime: anime)
-                                        .environmentObject(animeListVM) // ✅ Inject shared view model
-                                ) {
-                                    AnimeCardView(
-                                        anime: anime,
-                                        isAdded: addedAnimeIDs.contains(anime.id),
-                                        addAction: {
-                                            selectedAnime = anime
+                    if viewModel.searchResults.isEmpty && query.isEmpty {
+                        VStack(spacing: 16) {
+                            // Recent Searches Section
+                            if !viewModel.recentSearches.isEmpty {
+                                VStack(alignment: .leading, spacing: 15) {
+                                    HStack {
+                                        SectionHeader(title: "Recent Searches")
+                                        Spacer()
+                                        if viewModel.recentSearches.count > 3 {
+                                            Button(showAllRecentSearches ? "Hide" : "View All") {
+                                                withAnimation {
+                                                    showAllRecentSearches.toggle()
+                                                }
+                                            }
+                                            .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                                            .foregroundColor(.pink)
+                                        }
+                                    }
+
+                                    ChipCloudView(
+                                        data: showAllRecentSearches ? viewModel.recentSearches : Array(viewModel.recentSearches.prefix(3)),
+                                        onSelect: { selectedQuery in
+                                            self.query = selectedQuery
+                                            viewModel.performSearch(for: selectedQuery)
+                                        },
+                                        onRemove: { queryToRemove in
+                                            viewModel.removeRecentSearch(queryToRemove)
                                         }
                                     )
+                                    .padding(.horizontal)
                                 }
-                                .buttonStyle(PlainButtonStyle())
                             }
+
+
+                            // Recommended Anime Section
+                           if !viewModel.recommendedAnime.isEmpty {
+                                SectionHeader(title: "Recommended Anime")
+                                   .padding(.top, 15)
+
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 12) {
+                                        ForEach(viewModel.recommendedAnime) { anime in
+                                            NavigationLink(
+                                                destination: AnimeDetailView(anime: anime)
+                                                    .environmentObject(animeDataService)
+                                            ) {
+                                                RecommendationCard(anime: anime)
+                                            }
+                                            .buttonStyle(PlainButtonStyle())
+
+                                        }
+                                    }
+                                    .padding(.horizontal, 16)
+                                }
+                           }
                         }
-                        .padding(.bottom, 40)
+                        .padding(.top, 40)
+                    } else {
+                        ScrollView {
+                            LazyVStack(spacing: 20) {
+                                ForEach(viewModel.searchResults) { anime in
+                                    NavigationLink(
+                                        destination: AnimeDetailView(anime: anime)
+                                            .environmentObject(animeListVM)
+                                    ) {
+                                        AnimeCardView(
+                                            anime: anime,
+                                            isAdded: addedAnimeIDs.contains(anime.id),
+                                            addAction: {
+                                                selectedAnime = anime
+                                            }
+                                        )
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                }
+                            }
+                            
+                            .padding(.top, 20)
+                            .padding(.bottom, 40)
+                        }
                     }
                 }
+                .frame(maxHeight: .infinity, alignment: .top)
             }
             .sheet(item: $selectedAnime) { anime in
                 AddAnimeSheet(anime: anime) { status, score, progress in
@@ -98,6 +182,53 @@ struct AnimeSearchView: View {
         }
     }
 }
+
+// MARK: - Chip Cloud View
+
+struct ChipCloudView: View {
+    let data: [String]
+    let onSelect: (String) -> Void
+    let onRemove: (String) -> Void
+
+    let columns = [
+        GridItem(.adaptive(minimum: 100), spacing: 8)
+    ]
+
+    var body: some View {
+        LazyVGrid(columns: columns, spacing: 8) {
+            ForEach(data, id: \.self) { query in
+                HStack(spacing: 8) {
+                    Text(query)
+                        .font(AppFonts.custom(size: 14))
+                        .foregroundColor(.white)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    Button(action: {
+                        onRemove(query)
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 14))
+                            .foregroundColor(.white.opacity(0.6))
+                    }
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(Color.white.opacity(0.08))
+                .cornerRadius(10) // Rectangle with slightly rounded edges
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.white.opacity(0.15), lineWidth: 1)
+                )
+                .onTapGesture {
+                    onSelect(query)
+                }
+            }
+        }
+    }
+}
+
 
 // MARK: - Card View
 struct AnimeCardView: View {
@@ -203,6 +334,21 @@ struct AddAnimeSheet: View {
         }
     }
 }
+
+struct SectionHeader: View {
+    let title: String
+
+    var body: some View {
+        HStack {
+            Text(title)
+                .font(.system(size: 18, weight: .bold, design: .monospaced))
+                .foregroundColor(.white)
+            Spacer() // Pushes text to the left
+        }
+        .padding(.horizontal)
+    }
+}
+
 
 // MARK: - Preview
 #Preview {

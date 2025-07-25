@@ -1,86 +1,95 @@
 import Foundation
+import Combine
 
-// MARK: - ViewModel
 class AnimeSearchViewModel: ObservableObject {
     @Published var searchResults: [SearchAnime] = []
+    @Published var recommendedAnime: [SearchAnime] = []
+    @Published var recentSearches: [String] = []
 
-    // MARK: - Search Anime
-    func performSearch(for query: String) {
-        guard let url = URL(string: "https://graphql.anilist.co") else {
-            print("❌ Invalid search query.")
-            return
-        }
+    private let recentSearchesKey = "recentSearches"
+    private let dataService = AnimeDataService.shared
+    private var cancellables = Set<AnyCancellable>()
 
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    init() {
+        loadRecentSearches()
+        fetchRecommendedAnime()
+    }
 
-        let graphQLQuery = """
-        query ($search: String) {
+    // MARK: - Recent Searches
+
+    private func saveRecentSearch(_ query: String) {
+        var searches = UserDefaults.standard.stringArray(forKey: recentSearchesKey) ?? []
+        searches.removeAll { $0.lowercased() == query.lowercased() }
+        searches.insert(query, at: 0)
+        if searches.count > 10 { searches = Array(searches.prefix(10)) }
+        UserDefaults.standard.setValue(searches, forKey: recentSearchesKey)
+        recentSearches = searches
+    }
+
+    private func loadRecentSearches() {
+        recentSearches = UserDefaults.standard.stringArray(forKey: recentSearchesKey) ?? []
+    }
+    
+    
+     func removeRecentSearch(_ query: String) {
+         recentSearches.removeAll { $0 == query }
+         UserDefaults.standard.setValue(recentSearches, forKey: recentSearchesKey)
+     }
+
+    // MARK: - Recommended Anime (Trending)
+
+    func fetchRecommendedAnime() {
+        let query = """
+        query {
           Page(perPage: 10) {
-            media(search: $search, type: ANIME) {
+            media(sort: TRENDING_DESC, type: ANIME) {
               id
-              title {
-                romaji
-              }
-              coverImage {
-                large
-              }
+              title { romaji }
+              coverImage { large }
             }
           }
         }
         """
 
-        let jsonBody: [String: Any] = [
-            "query": graphQLQuery,
-            "variables": ["search": query]
-        ]
-
-        do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: jsonBody)
-        } catch {
-            print("❌ Failed to encode request body: \(error)")
-            return
-        }
-
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    print("❌ Network error:", error.localizedDescription)
-                    return
-                }
-
-                guard let data = data else {
-                    print("❌ No data received")
-                    return
-                }
-
-                do {
-                    if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-                       let page = (json["data"] as? [String: Any])?["Page"] as? [String: Any],
-                       let mediaArray = page["media"] as? [[String: Any]] {
-
-                        let results = mediaArray.compactMap { item -> SearchAnime? in
-                            guard let id = item["id"] as? Int,
-                                  let titleDict = item["title"] as? [String: Any],
-                                  let title = titleDict["romaji"] as? String,
-                                  let cover = item["coverImage"] as? [String: Any],
-                                  let imageURL = cover["large"] as? String else {
-                                return nil
-                            }
-                            return SearchAnime(id: id, title: title, imageURL: imageURL)
+        NetworkService.shared.performRequest(query: query)
+                    .map { (response: SearchResponse) -> [SearchAnime] in
+                        response.data.Page.media.map { media in
+                            SearchAnime(
+                                id: media.id,
+                                title: media.title.romaji,
+                                imageURL: media.coverImage.large
+                            )
                         }
-
-                        self.searchResults = results
-
-                    } else {
-                        print("❌ Failed to parse JSON response.")
                     }
-                } catch {
-                    print("❌ JSON decoding error:", error)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                if case .failure(let error) = completion {
+                    print("❌ Trending fetch failed:", error.localizedDescription)
                 }
-            }
-        }.resume()
+            }, receiveValue: { [weak self] animes in
+                self?.recommendedAnime = animes
+            })
+            .store(in: &cancellables)
+    }
+
+    // MARK: - Search Anime
+
+    func performSearch(for query: String) {
+        guard !query.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+
+        saveRecentSearch(query)
+
+        dataService.searchAnime(query: query)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                if case .failure(let error) = completion {
+                    print("❌ Search failed:", error.localizedDescription)
+                    self?.searchResults = []
+                }
+            }, receiveValue: { [weak self] animes in
+                self?.searchResults = animes
+            })
+            .store(in: &cancellables)
     }
 
     // MARK: - Add Anime to AniList

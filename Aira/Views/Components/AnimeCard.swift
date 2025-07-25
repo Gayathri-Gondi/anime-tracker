@@ -142,3 +142,42 @@ struct AnimeGridCard: View {
         .cornerRadius(4)
     }
 }
+
+struct RecommendationCard: View {
+    let anime: SearchAnime
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            ZStack(alignment: .topLeading) {
+                // Poster Image
+                AsyncImage(url: URL(string: anime.imageURL)) { image in
+                    image
+                        .resizable()
+                        .scaledToFill()
+                } placeholder: {
+                    Color.white.opacity(0.1)
+                }
+                .frame(width: 130, height: 190)
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+
+                // "Recommended" badge on top-left
+                Text("Recommended")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundColor(.pink)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(.ultraThinMaterial, in: Capsule())
+                    .padding(8)
+            }
+
+            // Title below the card
+
+            Text(anime.title)
+                .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                .foregroundColor(.white)
+                .lineLimit(1)            // truncate after 1 line
+                .truncationMode(.tail)   // "..."
+                .padding(.leading, 4)        }
+        .frame(width: 130)
+    }
+}
