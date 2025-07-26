@@ -27,7 +27,7 @@ struct ViewMoreListView: View {
 
                     VStack(alignment: .leading) {
                         Text(anime.title)
-                            .font(AppFonts.custom(size: 16))
+                            .font(.system(size: 14, weight: .bold, design: .monospaced))
                             .foregroundColor(.white)
 
                         Text("Status: \(anime.userStatus.capitalized)")

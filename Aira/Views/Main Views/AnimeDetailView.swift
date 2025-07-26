@@ -27,35 +27,52 @@ struct AnimeDetailView: View {
                     .progressViewStyle(CircularProgressViewStyle(tint: .white))
             } else if let details = details {
                 ScrollView {
-                    VStack(spacing: 20) {
+                    VStack(spacing: 24) {
+                        // Anime Image
                         AsyncImage(url: URL(string: anime.imageURL)) { phase in
                             if let image = phase.image {
-                                image.resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(maxWidth: 300)
-                                    .cornerRadius(12)
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 240, height: 340)
+                                    .clipped()
+                                    .cornerRadius(20)
+                                    .shadow(radius: 10)
                             } else {
-                                Color.gray.frame(width: 300, height: 400)
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(Color.gray.opacity(0.3))
+                                    .frame(width: 240, height: 340)
                             }
                         }
 
+                        // Title
                         Text(details.title.romaji ?? anime.title)
-                            .font(AppFonts.custom(size: 22))
-                            .foregroundColor(.white)
+                            .font(.system(size: 20, weight: .bold, design: .monospaced))
                             .multilineTextAlignment(.center)
-                            .padding(.horizontal)
+                            .foregroundColor(.white)
 
+                        // Synopsis
                         if let description = details.description {
-                            Text(description
-                                .replacingOccurrences(of: "<br>", with: "\n")
-                                .replacingOccurrences(of: "<i>", with: "")
-                                .replacingOccurrences(of: "</i>", with: ""))
-                            .font(AppFonts.custom(size: 16))
-                                .foregroundColor(.white.opacity(0.9))
-                                .padding(.horizontal)
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("📝 Synopsis")
+                                    .font(.system(size: 18, weight: .bold, design: .monospaced))
+                                    .foregroundColor(.pink)
+
+                                Text(description
+                                    .replacingOccurrences(of: "<br>", with: "\n")
+                                    .replacingOccurrences(of: "<i>", with: "")
+                                    .replacingOccurrences(of: "</i>", with: ""))
+                                    .font(.system(size: 12, design: .monospaced))
+                                    .foregroundColor(.white.opacity(0.9))
+                            }
+                            .padding()
+                            .background(Color.white.opacity(0.05))
+                            .cornerRadius(16)
+                            .padding(.horizontal)
                         }
 
-                        Group {
+                        // Anime Info
+                        VStack(spacing: 12) {
                             if let format = details.format {
                                 DetailRow(label: "Format", value: format)
                             }
@@ -72,61 +89,75 @@ struct AnimeDetailView: View {
                                 DetailRow(label: "Genres", value: genres.joined(separator: ", "))
                             }
                         }
-
-                        Divider().background(.white.opacity(0.6)).padding(.top)
-
-                        VStack(alignment: .leading, spacing: 12) {
-                            Text("🎯 Your AniList Entry")
-                                .font(AppFonts.custom(size: 18))
-                                .foregroundColor(.white)
-
-                            TextField("Progress", text: $userProgress)
-                                .keyboardType(.numberPad)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-
-                            TextField("Score (out of 100)", text: $userScore)
-                                .keyboardType(.numberPad)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-
-                            Picker("Status", selection: $userStatus) {
-                                ForEach(statusOptions, id: \.self) {
-                                    Text($0.capitalized)
-                                }
-                            }
-                            .pickerStyle(SegmentedPickerStyle())
-                        }
+                        .padding()
+                        .background(Color.white.opacity(0.05))
+                        .cornerRadius(16)
                         .padding(.horizontal)
 
+                        // User Entry
+                        VStack(alignment: .leading, spacing: 16) {
+                            Text("🎯 Your AniList Entry")
+                                .font(.system(size: 20, weight: .bold, design: .monospaced))
+                                .foregroundColor(.mint)
+
+                            Group {
+                                TextField("Progress", text: $userProgress)
+                                    .keyboardType(.numberPad)
+                                TextField("Score (out of 100)", text: $userScore)
+                                    .keyboardType(.numberPad)
+
+                                Picker("Status", selection: $userStatus) {
+                                    ForEach(statusOptions, id: \.self) {
+                                        Text($0.capitalized)
+                                    }
+                                }
+                                .pickerStyle(SegmentedPickerStyle())
+                            }
+                            .textFieldStyle(.roundedBorder)
+                            .font(.system(size: 16, design: .monospaced))
+                        }
+                        .padding()
+                        .background(Color.white.opacity(0.05))
+                        .cornerRadius(16)
+                        .padding(.horizontal)
+
+                        // Buttons
                         if isUpdating {
                             ProgressView()
                         } else {
                             HStack(spacing: 16) {
-                                Button("💾 Save Changes to AniList") {
-                                    updateAniListEntry()
+                                Button(action: updateAniListEntry) {
+                                    Label("Save", systemImage: "square.and.arrow.down")
+                                        .padding()
+                                        .frame(maxWidth: .infinity)
+                                        .background(Color.pink.opacity(0.9))
+                                        .foregroundColor(.white)
+                                        .cornerRadius(12)
                                 }
-                                .padding()
-                                .foregroundColor(.white)
-                                .background(Color.pink)
-                                .cornerRadius(12)
 
-                                Button("🗑️ Delete") {
-                                    deleteAniListEntry()
+                                Button(action: deleteAniListEntry) {
+                                    Label("Delete", systemImage: "trash")
+                                        .padding()
+                                        .frame(maxWidth: .infinity)
+                                        .background(Color.red.opacity(0.8))
+                                        .foregroundColor(.white)
+                                        .cornerRadius(12)
                                 }
-                                .padding()
-                                .foregroundColor(.white)
-                                .background(Color.red)
-                                .cornerRadius(12)
                             }
+                            .padding(.horizontal)
                         }
 
                         if !updateMessage.isEmpty {
                             Text(updateMessage)
-                                .foregroundColor(.green)
+                                .font(.system(size: 14, weight: .bold, design: .monospaced))
+                                .foregroundColor(updateMessage.contains("✅") ? .green : .red)
+                                .transition(.opacity)
                                 .padding(.top, 8)
                         }
                     }
-                    .padding()
+                    .padding(.top)
                 }
+
             } else {
                 Text("❌ Failed to load details.")
                     .foregroundColor(.white)
@@ -325,11 +356,11 @@ struct DetailRow: View {
     var body: some View {
         HStack {
             Text("\(label):")
-                .font(AppFonts.custom(size: 16))
+                .font(.system(size: 16, design: .monospaced))
                 .foregroundColor(.white.opacity(0.8))
             Spacer()
             Text(value)
-                .font(AppFonts.custom(size: 16))
+                .font(.system(size: 14, design: .monospaced))
                 .foregroundColor(.white)
         }
         .padding(.horizontal)

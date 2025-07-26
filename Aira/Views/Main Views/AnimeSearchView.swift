@@ -36,7 +36,7 @@ struct AnimeSearchView: View {
                     // 🔍 Search Field
                     HStack(spacing: 8) {
                         TextField("Search for anime...", text: $query)
-                            .font(AppFonts.custom(size: 16))
+                            .font(.system(size: 12, design: .monospaced))
                             .padding(12)
                             .background(Color.white.opacity(0.1))
                             .cornerRadius(10)
@@ -273,7 +273,7 @@ struct ChipCloudView: View {
             ForEach(data, id: \.self) { query in
                 HStack(spacing: 8) {
                     Text(query)
-                        .font(AppFonts.custom(size: 14))
+                        .font(.system(size: 12, design: .monospaced))
                         .foregroundColor(.white)
                         .lineLimit(1)
                         .truncationMode(.tail)
@@ -326,18 +326,18 @@ struct AnimeCardView: View {
 
             VStack(alignment: .leading, spacing: 6) {
                 Text(anime.title)
-                    .font(AppFonts.custom(size: 18))
+                    .font(.system(size: 16, weight: .bold, design: .monospaced))
                     .foregroundColor(.white)
                     .lineLimit(2)
 
                 if isAdded {
                     Label("Added to AniList", systemImage: "checkmark.seal.fill")
-                        .font(AppFonts.custom(size: 14))
+                        .font(.system(size: 12,  design: .monospaced))
                         .foregroundColor(.green)
                 } else {
                     Button(action: addAction) {
                         Label("Add to AniList", systemImage: "plus.circle.fill")
-                            .font(AppFonts.custom(size: 14))
+                            .font(.system(size: 12, design: .monospaced))
                             .foregroundColor(.white)
                             .padding(.vertical, 6)
                             .padding(.horizontal, 12)

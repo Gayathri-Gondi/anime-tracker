@@ -122,9 +122,9 @@ struct ErrorView: View {
             Image(systemName: "exclamationmark.triangle")
                 .font(.largeTitle)
             Text("Error loading anime list")
-                .font(AppFonts.custom(size: 16))
+                .font(.system(size: 16, design: .monospaced))
             Text(error.localizedDescription)
-                .font(AppFonts.custom(size: 14))
+                .font(.system(size: 14, design: .monospaced))
                 .foregroundColor(.gray)
         }
         .padding()
