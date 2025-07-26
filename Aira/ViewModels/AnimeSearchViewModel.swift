@@ -14,6 +14,8 @@ class AnimeSearchViewModel: ObservableObject {
         loadRecentSearches()
         fetchRecommendedAnime()
     }
+    
+    
 
     // MARK: - Recent Searches
 

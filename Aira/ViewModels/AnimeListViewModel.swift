@@ -90,6 +90,63 @@ class AnimeListViewModel: ObservableObject {
     func removeAnime(withId id: Int) {
         animeList.removeAll { $0.id == id }
     }
+    
+    var upcomingSequels: [SearchAnime] {
+        
+        // Step 1: Get all user anime IDs
+        let userAnimeIDs = Set(animeList.map { $0.id })
+        let allSequels = animeList.flatMap { anime in
+            anime.relatedMedia?.filter {
+                $0.relationType == "SEQUEL" &&
+                ($0.status?.uppercased() == "RELEASING" || $0.status?.uppercased() == "NOT_YET_RELEASED") &&
+                !userAnimeIDs.contains($0.id)
+            } ?? []
+        }
+
+        let converted = allSequels.map {
+            SearchAnime(
+                id: $0.id,
+                title: $0.title.romaji,
+                imageURL: $0.coverImage.large,
+                animeStatus: $0.status ?? "UNKNOWN"
+            )
+        }
+
+        return Array(Set(converted))
+    }
+
+    var finishedSequels: [SearchAnime] {
+        // Step 1: Get all user anime IDs
+        let userAnimeIDs = Set(animeList.map { $0.id })
+
+        // Step 2: Gather finished sequels that are NOT in the user's list
+        let allSequels = animeList.flatMap { anime in
+            anime.relatedMedia?.filter {
+                $0.relationType == "SEQUEL" &&
+                $0.status?.uppercased() == "FINISHED" &&
+                !userAnimeIDs.contains($0.id)
+            } ?? []
+        }
+
+        // Step 3: Convert to SearchAnime
+        let converted = allSequels.map {
+            SearchAnime(
+                id: $0.id,
+                title: $0.title.romaji,
+                imageURL: $0.coverImage.large,
+                animeStatus: $0.status ?? "UNKNOWN"
+            )
+        }
+
+        // Step 4: Return deduplicated list
+        return Array(Set(converted))
+    }
+
+
+    
+
+    
 }
+
 
 

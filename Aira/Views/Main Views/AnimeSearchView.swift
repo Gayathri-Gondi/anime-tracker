@@ -5,7 +5,9 @@ struct SearchAnime: Identifiable, Hashable {
     let id: Int
     let title: String
     let imageURL: String
+    var animeStatus: String? = nil
 }
+
 
 // MARK: - View
 struct AnimeSearchView: View {
@@ -31,6 +33,7 @@ struct AnimeSearchView: View {
                 .edgesIgnoringSafeArea(.all)
 
                 VStack(spacing: 0) {
+                    // 🔍 Search Field
                     HStack(spacing: 8) {
                         TextField("Search for anime...", text: $query)
                             .font(AppFonts.custom(size: 16))
@@ -63,85 +66,32 @@ struct AnimeSearchView: View {
                     .animation(.easeInOut, value: query)
                     .padding([.horizontal, .top])
 
-                    if viewModel.searchResults.isEmpty && query.isEmpty {
-                        VStack(spacing: 16) {
-                            // Recent Searches Section
-                            if !viewModel.recentSearches.isEmpty {
-                                VStack(alignment: .leading, spacing: 15) {
-                                    HStack {
-                                        SectionHeader(title: "Recent Searches")
-                                        Spacer()
-                                        if viewModel.recentSearches.count > 3 {
-                                            Button(showAllRecentSearches ? "Hide" : "View All") {
-                                                withAnimation {
-                                                    showAllRecentSearches.toggle()
-                                                }
-                                            }
-                                            .font(.system(size: 12, weight: .semibold, design: .monospaced))
-                                            .foregroundColor(.pink)
-                                        }
-                                    }
-
-                                    ChipCloudView(
-                                        data: showAllRecentSearches ? viewModel.recentSearches : Array(viewModel.recentSearches.prefix(3)),
-                                        onSelect: { selectedQuery in
-                                            self.query = selectedQuery
-                                            viewModel.performSearch(for: selectedQuery)
-                                        },
-                                        onRemove: { queryToRemove in
-                                            viewModel.removeRecentSearch(queryToRemove)
-                                        }
-                                    )
-                                    .padding(.horizontal)
-                                }
-                            }
-
-
-                            // Recommended Anime Section
-                           if !viewModel.recommendedAnime.isEmpty {
-                                SectionHeader(title: "Recommended Anime")
-                                   .padding(.top, 15)
-
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack(spacing: 12) {
-                                        ForEach(viewModel.recommendedAnime) { anime in
-                                            NavigationLink(
-                                                destination: AnimeDetailView(anime: anime)
-                                                    .environmentObject(animeDataService)
-                                            ) {
-                                                RecommendationCard(anime: anime)
-                                            }
-                                            .buttonStyle(PlainButtonStyle())
-
-                                        }
-                                    }
-                                    .padding(.horizontal, 16)
-                                }
-                           }
-                        }
-                        .padding(.top, 40)
-                    } else {
+                    // 🔁 Main Content
+                    if !viewModel.searchResults.isEmpty {
+                        searchResultsSection  // ✅ this shows results
+                    } else if query.isEmpty {
                         ScrollView {
-                            LazyVStack(spacing: 20) {
-                                ForEach(viewModel.searchResults) { anime in
-                                    NavigationLink(
-                                        destination: AnimeDetailView(anime: anime)
-                                            .environmentObject(animeListVM)
-                                    ) {
-                                        AnimeCardView(
-                                            anime: anime,
-                                            isAdded: addedAnimeIDs.contains(anime.id),
-                                            addAction: {
-                                                selectedAnime = anime
-                                            }
-                                        )
-                                    }
-                                    .buttonStyle(PlainButtonStyle())
+                            VStack(spacing: 24) {
+                                if !viewModel.recentSearches.isEmpty {
+                                    recentSearchesSection
+                                    Divider().background(Color.white.opacity(0.1)).padding(.horizontal, 16)
+                                }
+
+                                if !animeListVM.upcomingSequels.isEmpty {
+                                    upcomingSequelsSection
+                                    Divider().background(Color.white.opacity(0.1)).padding(.horizontal, 16)
+                                }
+
+                                if !animeListVM.finishedSequels.isEmpty {
+                                    finishedSequelsSection
+                                    Divider().background(Color.white.opacity(0.1)).padding(.horizontal, 16)
+                                }
+
+                                if !viewModel.recommendedAnime.isEmpty {
+                                    recommendedAnimeSection.padding(.bottom, 30)
                                 }
                             }
-                            
-                            .padding(.top, 20)
-                            .padding(.bottom, 40)
+                            .padding(.top, 40)
                         }
                     }
                 }
@@ -181,7 +131,131 @@ struct AnimeSearchView: View {
             }
         }
     }
+
+    private var recentSearchesSection: some View {
+        VStack(alignment: .leading, spacing: 15) {
+            HStack {
+                SectionHeader(title: "Recent Searches")
+                Spacer()
+                if viewModel.recentSearches.count > 3 {
+                    Button(showAllRecentSearches ? "Hide" : "View All") {
+                        withAnimation {
+                            showAllRecentSearches.toggle()
+                        }
+                    }
+                    .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                    .foregroundColor(.pink)
+                }
+            }
+
+            ChipCloudView(
+                data: showAllRecentSearches ? viewModel.recentSearches : Array(viewModel.recentSearches.prefix(3)),
+                onSelect: { selectedQuery in
+                    self.query = selectedQuery
+                    viewModel.performSearch(for: selectedQuery)
+                },
+                onRemove: { queryToRemove in
+                    viewModel.removeRecentSearch(queryToRemove)
+                }
+            )
+            .padding(.horizontal)
+        }
+    }
+    
+    
+    private var upcomingSequelsSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            SectionHeader(title: "Upcoming Sequels")
+                .padding(.top, 10)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    ForEach(animeListVM.upcomingSequels, id: \.id) { sequel in
+                        NavigationLink(
+                            destination: AnimeDetailView(anime: sequel)
+                                .environmentObject(animeDataService)
+                        ) {
+                            RecommendationCard(anime: sequel)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
+                }
+                .padding(.horizontal, 16)
+            }
+        }
+    }
+    
+    private var finishedSequelsSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            SectionHeader(title: "You might like")
+                .padding(.top, 10)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    ForEach(animeListVM.finishedSequels, id: \.id) { sequel in
+                        NavigationLink(
+                            destination: AnimeDetailView(anime: sequel)
+                                .environmentObject(animeDataService)
+                        ) {
+                            RecommendationCard(anime: sequel)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
+                }
+                .padding(.horizontal, 16)
+            }
+        }
+    }
+
+
+
+    private var recommendedAnimeSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            SectionHeader(title: "Recommended Anime")
+                .padding(.top, 15)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    ForEach(viewModel.recommendedAnime) { anime in
+                        NavigationLink(
+                            destination: AnimeDetailView(anime: anime)
+                                .environmentObject(animeDataService)
+                        ) {
+                            RecommendationCard(anime: anime)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
+                }
+                .padding(.horizontal, 16)
+            }
+        }
+    }
+
+    private var searchResultsSection: some View {
+        ScrollView {
+            LazyVStack(spacing: 20) {
+                ForEach(viewModel.searchResults) { anime in
+                    NavigationLink(
+                        destination: AnimeDetailView(anime: anime)
+                            .environmentObject(animeListVM)
+                    ) {
+                        AnimeCardView(
+                            anime: anime,
+                            isAdded: addedAnimeIDs.contains(anime.id),
+                            addAction: {
+                                selectedAnime = anime
+                            }
+                        )
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+            }
+            .padding(.top, 20)
+            .padding(.bottom, 40)
+        }
+    }
 }
+
 
 // MARK: - Chip Cloud View
 

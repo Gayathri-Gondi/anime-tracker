@@ -66,6 +66,9 @@ struct Anime: Identifiable, Equatable {
     var nextAiringEpisodeTime: Int?
     var episodeNumber: Int?
     var userScore: Int?
+    
+    
+    var relatedMedia: [RelatedMedia]? = nil  // ← ✅ NEW
 }
 
 // MARK: - Search Models
@@ -85,6 +88,7 @@ struct SearchMedia: Decodable {
     let id: Int
     let title: Title
     let coverImage: CoverImage
+    let status: String?           
 }
 
 // MARK: - Common Sub-models
@@ -94,16 +98,55 @@ struct Media: Decodable {
     let coverImage: CoverImage
     let status: String
     let nextAiringEpisode: AiringEpisode?
+    let relations: MediaConnection?  // 👈 Add this
 }
 
-struct Title: Decodable {
+struct MediaConnection: Decodable {
+    let edges: [MediaEdge]
+}
+
+struct MediaEdge: Decodable {
+    let relationType: String
+    let node: RelatedMedia
+}
+
+struct RelatedMedia: Decodable, Equatable {
+    let id: Int
+    let title: Title
+    let coverImage: CoverImage
+    let format: String?
+    let status: String?
+    let startDate: FuzzyDate?
+    var relationType: String?  // ← Add this
+    let nextAiringEpisode: AiringInfo? // ← Needed for `airingAt`
+
+    var simplifiedTitle: String {
+        title.romaji
+    }
+
+    var imageURL: String {
+        coverImage.large
+    }
+}
+
+struct AiringInfo: Decodable, Equatable  {
+    let airingAt: Int // Unix timestamp
+}
+
+
+struct Title: Decodable, Equatable {
     let romaji: String
 }
 
-struct CoverImage: Decodable {
+struct CoverImage: Decodable, Equatable {
     let large: String
 }
 
+struct FuzzyDate: Decodable, Equatable {
+    let year: Int?
+    let month: Int?
+    let day: Int?
+}
 struct AiringEpisode: Decodable {
     let airingAt: Int?
     let episode: Int?
@@ -141,6 +184,7 @@ enum AnimeViewMode: String, CaseIterable, Identifiable {
 }
 
 extension Anime {
+    
     static let placeholder = Anime(
         id: -1,
         title: "Loading...",
@@ -150,4 +194,26 @@ extension Anime {
         nextAiringEpisodeTime: nil,
         episodeNumber: nil
     )
+    
+    init(from entry: MediaEntry) {
+        let media = entry.media
+        let airing = media.nextAiringEpisode
+
+        self.init(
+            id: media.id,
+            title: media.title.romaji,
+            imageURL: media.coverImage.large,
+            animeStatus: media.status,
+            userStatus: entry.status,
+            nextAiringEpisodeTime: airing?.airingAt,
+            episodeNumber: airing?.episode,
+            userScore: nil,
+            relatedMedia: media.relations?.edges.map { edge in
+                var related = edge.node
+                related.relationType = edge.relationType  // ← Inject relation type
+                return related
+            }
+        )
+    }
 }
+

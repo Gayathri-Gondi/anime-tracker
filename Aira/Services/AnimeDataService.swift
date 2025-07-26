@@ -94,6 +94,7 @@ class AnimeDataService: ObservableObject, AnimeDataServiceProtocol {
               id
               title { romaji }
               coverImage { large }
+              status
             }
           }
         }
@@ -158,12 +159,26 @@ class AnimeDataService: ObservableObject, AnimeDataServiceProtocol {
                   coverImage { large }
                   status
                   nextAiringEpisode { airingAt episode }
+                  relations {
+                    edges {
+                      relationType
+                      node {
+                        id
+                        title { romaji }
+                        coverImage { large }
+                        format
+                        status
+                        startDate { year month day }
+                      }
+                    }
+                  }
                 }
               }
             }
           }
         }
         """
+
         
         return networkService.performRequest(query: query, token: token)
             .map { (response: AnimeListResponse) -> [Anime] in
@@ -177,29 +192,13 @@ class AnimeDataService: ObservableObject, AnimeDataServiceProtocol {
 
 // MARK: - Model Extensions
 
-private extension Anime {
-    init(from entry: MediaEntry) {
-        let media = entry.media
-        let airing = media.nextAiringEpisode
-        
-        self.init(
-            id: media.id,
-            title: media.title.romaji,
-            imageURL: media.coverImage.large,
-            animeStatus: media.status,
-            userStatus: entry.status,
-            nextAiringEpisodeTime: airing?.airingAt,
-            episodeNumber: airing?.episode
-        )
-    }
-}
-
 private extension SearchAnime {
     init(from media: SearchMedia) {
         self.init(
             id: media.id,
             title: media.title.romaji,
-            imageURL: media.coverImage.large
+            imageURL: media.coverImage.large,
+            animeStatus: media.status
         )
     }
 }
