@@ -73,7 +73,7 @@ struct ContentView: View {
                 authManager.startLogin()
             }
 
-            PixelButton(
+            /*PixelButton(
                 title: "Login with MyAnimeList",
                 iconImageName: "MAL",
                 background: AppColors.accent,
@@ -81,7 +81,7 @@ struct ContentView: View {
                 height: 40
             ) {
                 // TODO: Implement MAL login
-            }
+            } */
 
             Spacer()
         }
