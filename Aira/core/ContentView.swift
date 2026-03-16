@@ -34,7 +34,7 @@ struct ContentView: View {
             .onAppear {
                 checkLoginAndFetchList()
             }
-            .onChange(of: authManager.accessToken) { _ in
+            .onChange(of: authManager.accessToken) {
                 checkLoginAndFetchList()
             }
             .onOpenURL { url in
@@ -81,7 +81,7 @@ struct ContentView: View {
                 height: 40
             ) {
                 // TODO: Implement MAL login
-            } */
+            }*/
 
             Spacer()
         }
